@@ -123,9 +123,24 @@ while not free_residents.empty():
         free_residents.put(res)
         
 # Ensure that matching is stable
-# TODO
+stable = True
+# Iterate through each match by examining which people matched to which hos
+# For each person ranked above them on hos pref list, see if they prefer hos more
+# Examine each match list for each hospital
+for hos in hospitals:
+    # See if any person wanted another hospital more
+    for pers in hospitals[hos][1]:
+        # See people who are ranked ahead of this person on hos prefs
+        for res in hospital_prefs[hos]:
+            if res == pers:  break
+            # Make sure that person didn't prefer this hospital more
+            if hos not in resident_prefs_copy[res]:  continue
+            if resident_prefs_copy[res].index(hos) < \
+                resident_prefs_copy[res].index(residents[res]):
+                print("Unstable! See", res, hos)
+                stable = False
         
 print(residents)
 print(hospitals)     
-print(resident_prefs)
+print(hospital_prefs)
 print(resident_prefs_copy)  
